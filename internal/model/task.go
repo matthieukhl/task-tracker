@@ -17,6 +17,14 @@ type Task struct {
 }
 
 func New(title, description, status string) (Task, error) {
+	if err := checkStatus(status); err != nil {
+		return Task{}, err
+	}
+
+	if err := isTitleEmpty(title); err != nil {
+		return Task{}, err
+	}
+
 	return Task{
 		ID:          rand.Int(),
 		Title:       title,
@@ -40,8 +48,17 @@ func (t *Task) UpdateStatus(status string) error {
 
 // Helper function that checks 'status' input
 func checkStatus(status string) error {
-	if status != "done" && status != "in_progress" && status != "todo" {
-		return errors.New("Invalid status")
+	if status != "DONE" && status != "IN_PROGRESS" && status != "TODO" {
+		return errors.New("Invalid task status")
+	}
+
+	return nil
+}
+
+// Helper function that verifies task title is not empty
+func isTitleEmpty(title string) error {
+	if title == "" {
+		return errors.New("task title is empty - please provide a title to the task")
 	}
 
 	return nil
