@@ -49,9 +49,5 @@ func checkStatus(status string) error {
 
 // Helper function that sanitizes user 'title' input
 func sanitizeString(title string) string {
-	return strings.TrimSuffix(strings.ToTitle(title), " ")
-}
-
-func sanitizeDescription(description string) string {
-	return strings.TrimSuffix(description, " ")
+	return strings.TrimSpace(title)
 }

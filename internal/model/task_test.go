@@ -30,6 +30,32 @@ func TestCheckStatus(t *testing.T) {
 	})
 }
 
+func TestSanitizeTitle(t *testing.T) {
+	type testCase struct {
+		name     string
+		title    string
+		expected string
+	}
+
+	testCases := []testCase{
+		{
+			name:     "sucessful title sanitizing",
+			title:    "task title number 1   ",
+			expected: "task title number 1",
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			got := sanitizeString(test.title)
+
+			if test.expected != got {
+				t.Errorf("got %s, expected %s, given %s", got, test.expected, test.title)
+			}
+		})
+	}
+}
+
 // Helper function to assert no error occured during testing
 func assertNoError(t *testing.T, err error) {
 	t.Helper()
@@ -39,6 +65,7 @@ func assertNoError(t *testing.T, err error) {
 	}
 }
 
+// Helper function to assert an error occured during testing
 func assertError(t *testing.T, err error, params ...any) {
 	t.Helper()
 
