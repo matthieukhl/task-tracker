@@ -5,20 +5,20 @@ import (
 )
 
 func TestCheckStatus(t *testing.T) {
-	t.Run("successful check for 'done' input", func(t *testing.T) {
-		err := checkStatus("done")
+	t.Run("successful check for 'DONE' input", func(t *testing.T) {
+		err := checkStatus("DONE")
 
 		assertNoError(t, err)
 	})
 
-	t.Run("successful check for 'in_progress' input", func(t *testing.T) {
-		err := checkStatus("in_progress")
+	t.Run("successful check for 'IN_PROGRESS' input", func(t *testing.T) {
+		err := checkStatus("IN_PROGRESS")
 
 		assertNoError(t, err)
 	})
 
-	t.Run("successful check for 'todo' input", func(t *testing.T) {
-		err := checkStatus("todo")
+	t.Run("successful check for 'TODO' input", func(t *testing.T) {
+		err := checkStatus("TODO")
 
 		assertNoError(t, err)
 	})
@@ -30,7 +30,7 @@ func TestCheckStatus(t *testing.T) {
 	})
 }
 
-func TestSanitizeTitle(t *testing.T) {
+func TestSanitizeString(t *testing.T) {
 	type testCase struct {
 		name     string
 		title    string
@@ -54,6 +54,20 @@ func TestSanitizeTitle(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestIsTitleEmpty(t *testing.T) {
+	t.Run("title is empty", func(t *testing.T) {
+		got := isTitleEmpty("")
+
+		assertError(t, got)
+	})
+
+	t.Run("title is not empty", func(t *testing.T) {
+		got := isTitleEmpty("not empty")
+
+		assertNoError(t, got)
+	})
 }
 
 // Helper function to assert no error occured during testing
