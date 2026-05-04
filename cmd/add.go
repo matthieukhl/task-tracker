@@ -29,24 +29,28 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 
+		// Recover the description from the flags
 		description, err := cmd.Flags().GetString("description")
 		if err != nil {
 			slog.Error("error parsing description", "err", err)
 			os.Exit(1)
 		}
 
+		// Recover the stataus from the flags
 		status, err := cmd.Flags().GetString("status")
 		if err != nil {
 			slog.Error("error parsing status", "err", err)
 			os.Exit(1)
 		}
 
+		// Create new task
 		newTask, err := model.New(title, description, status)
 		if err != nil {
 			slog.Error("error creating new task", "err", err)
 			os.Exit(1)
 		}
 
+		// Write task to file
 		file, err := os.OpenFile("./data/tasks.json", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 		if err != nil {
 			slog.Error("error reading or creating tasks.json file", "err", err)
@@ -55,7 +59,7 @@ to quickly create a Cobra application.`,
 
 		decoder := json.NewDecoder(file)
 		tasks := []model.Task{}
-		decoder.Decode(tasks)
+		decoder.Decode(&tasks)
 
 		tasks = append(tasks, newTask)
 
