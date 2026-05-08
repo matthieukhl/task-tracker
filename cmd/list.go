@@ -4,13 +4,11 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"encoding/json"
-	"log"
+	"log/slog"
 	"os"
 	"strconv"
 	"time"
 
-	"github.com/matthieukhl/task-tracker/internal/model"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 )
@@ -26,17 +24,10 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		file, err := os.OpenFile("data/tasks.json", os.O_RDONLY, 0644)
-		if err != nil {
-			log.Println(err)
-			os.Exit(1)
-		}
 
-		tasks := []model.Task{}
-		decoder := json.NewDecoder(file)
-		err = decoder.Decode(&tasks)
+		tasks, err := getTasks()
 		if err != nil {
-			log.Println(err)
+			slog.Error("failed to get tasks", "err", err)
 			os.Exit(1)
 		}
 

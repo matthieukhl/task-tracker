@@ -9,7 +9,6 @@ import (
 	"os"
 	"slices"
 
-	"github.com/matthieukhl/task-tracker/internal/model"
 	"github.com/spf13/cobra"
 )
 
@@ -30,19 +29,8 @@ to quickly create a Cobra application.`,
 			slog.Error("error parsing task ID", "err", err)
 			os.Exit(1)
 		}
-		rfile, err := os.OpenFile("./data/tasks.json", os.O_RDONLY, 0644)
-		if err != nil {
-			slog.Error("failed to read tasks.json file", "err", err)
-			os.Exit(1)
-		}
-		defer rfile.Close()
 
-		tasks := []model.Task{}
-		err = json.NewDecoder(rfile).Decode(&tasks)
-		if err != nil {
-			slog.Error("failed to decode JSON data from file", "err", err)
-			os.Exit(1)
-		}
+		tasks, err := getTasks()
 
 		for i, task := range tasks {
 			if taskID == task.ID {
